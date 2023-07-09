@@ -25,7 +25,6 @@ class ViewController: UIViewController {
         longPressGesture.isEnabled = true
         longPressGesture.delegate = self
         longPressGesture.addTarget(self, action: #selector(handleLongPress))
-        
         someView.addGestureRecognizer(longPressGesture)
     }
     
@@ -40,7 +39,7 @@ class ViewController: UIViewController {
             handleEnded(gesture)
         }
     }
-    
+
     private func handleBegan(_ gesture: UILongPressGestureRecognizer) {
         originalPosition = gesture.location(in: view)
         snapshotedView = someView.snapshotView(afterScreenUpdates: true)
@@ -48,16 +47,18 @@ class ViewController: UIViewController {
         view.addSubview(snapshotedView!)
         someView.alpha = 0
     }
-    
+
     private func handleChanged(_ gesture: UILongPressGestureRecognizer) {
         let newLocation = gesture.location(in: view)
         let xOffset = newLocation.x - originalPosition.x
         let yOffset = newLocation.y - originalPosition.y
         let translation = CGAffineTransform(translationX: xOffset, y: yOffset)
+
         snapshotedView?.transform = translation
     }
-    
+
     private func handleEnded(_ gesture: UILongPressGestureRecognizer) {
+        someView.frame = snapshotedView?.frame ?? .zero
         snapshotedView?.alpha = 0
         snapshotedView?.removeFromSuperview()
         someView.alpha = 1
