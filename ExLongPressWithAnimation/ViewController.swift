@@ -9,6 +9,8 @@ import UIKit
 
 class ViewController: UIViewController {
     private let someView = UIView()
+    private let otherView = UIView()
+    private let anotherView = UIView()
     private var snapshotedView: UIView?
     private var isDragging = false
     private var originalPosition = CGPoint.zero
@@ -17,8 +19,16 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         someView.backgroundColor = .green
+        otherView.backgroundColor = .lightGray
+        anotherView.backgroundColor = .blue
+        
         view.addSubview(someView)
-        someView.frame = .init(x: 120, y: 120, width: 200, height: 200)
+        view.addSubview(otherView)
+        view.addSubview(anotherView)
+
+        someView.frame = .init(x: 120, y: 120, width: 100, height: 100)
+        otherView.frame = .init(x: 120, y: 230, width: 100, height: 100)
+        anotherView.frame = .init(x: 120, y: 340, width: 100, height: 100)
         
         let longPressGesture = UILongPressGestureRecognizer()
         longPressGesture.minimumPressDuration = 0.3
@@ -53,7 +63,6 @@ class ViewController: UIViewController {
         let xOffset = newLocation.x - originalPosition.x
         let yOffset = newLocation.y - originalPosition.y
         let translation = CGAffineTransform(translationX: xOffset, y: yOffset)
-
         snapshotedView?.transform = translation
     }
 
