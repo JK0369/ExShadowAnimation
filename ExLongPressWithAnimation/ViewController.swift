@@ -99,10 +99,17 @@ class ViewController: UIViewController {
     }
 
     private func handleEnded(_ gesture: UILongPressGestureRecognizer) {
-        someView.frame = snapshotedView?.frame ?? .zero
+        someView.frame.origin = snapshotedView?.frame.origin ?? .zero
         snapshotedView?.alpha = 0
         snapshotedView?.removeFromSuperview()
         someView.alpha = 1
+        
+        // Animation - 스캐일 복구
+        [someView, otherView, anotherView, snapshotedView]
+            .compactMap { $0 }
+            .forEach { subview in
+                subview.transform = .identity
+            }
     }
 }
 
