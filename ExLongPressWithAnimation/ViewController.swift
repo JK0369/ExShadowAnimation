@@ -97,18 +97,41 @@ class ViewController: UIViewController {
         let scaleTranasform = CGAffineTransform(scaleX: upScale, y: upScale)
         snapshotedView?.transform = translationTransform.concatenating(scaleTranasform)
     }
-
+    
     private func handleEnded(_ gesture: UILongPressGestureRecognizer) {
         someView.frame.origin = snapshotedView?.frame.origin ?? .zero
         snapshotedView?.alpha = 0
         snapshotedView?.removeFromSuperview()
         someView.alpha = 1
         
-        // Animation - 스캐일 복구
-        [someView, otherView, anotherView, snapshotedView]
-            .compactMap { $0 }
+        // Animation - drag 시작할때 적용한 애니메이션 되돌리기
+        UIView.animate(
+            withDuration: 0.4,
+            delay: 0,
+            usingSpringWithDamping: 0.8,
+            initialSpringVelocity: 0,
+            options: [.allowUserInteraction, .beginFromCurrentState],
+            animations: { self.animateEndDrop() },
+            completion: { _ in
+                // Hide the temporaryView, show the actualView
+                self.snapshotedView?.removeFromSuperview()
+                self.someView.alpha = 1
+            }
+        )
+    }
+
+    func animateEndDrop() {
+        snapshotedView?.transform = .identity
+        snapshotedView?.alpha = 1.0
+        
+        [someView, otherView, anotherView]
             .forEach { subview in
-                subview.transform = .identity
+                UIView.animate(
+                    withDuration: 0.3,
+                    animations: {
+                        subview.transform = .identity
+                    }
+                )
             }
     }
 }
