@@ -84,6 +84,32 @@ class ViewController: UIViewController {
             .forEach { subview in
                 subview.transform = CGAffineTransform(scaleX: downScale, y: downScale)
             }
+        
+        // shadow animation
+        let shadowOpacityAnimation = CABasicAnimation(keyPath: "shadowOpacity")
+        shadowOpacityAnimation.fromValue = 0
+        shadowOpacityAnimation.toValue = 0.8
+        shadowOpacityAnimation.isRemovedOnCompletion = false
+        shadowOpacityAnimation.fillMode = .forwards
+
+        let shadowOffsetHeightAnimation = CABasicAnimation(keyPath: "shadowOffset.height")
+        shadowOffsetHeightAnimation.fromValue = 0
+        shadowOffsetHeightAnimation.toValue = 3
+        shadowOffsetHeightAnimation.isRemovedOnCompletion = false
+        shadowOffsetHeightAnimation.fillMode = .forwards
+
+        let shadowRadiusAnimation = CABasicAnimation(keyPath: "shadowRadius")
+        shadowRadiusAnimation.fromValue = 0
+        shadowRadiusAnimation.toValue = 8
+        shadowRadiusAnimation.isRemovedOnCompletion = false
+        shadowRadiusAnimation.fillMode = .forwards
+
+        [otherView, anotherView]
+            .forEach { subview in
+                subview.layer.add(shadowOpacityAnimation, forKey: "animation_shadow_opacity")
+                subview.layer.add(shadowOffsetHeightAnimation, forKey: "animation_shadow_offset_height")
+                subview.layer.add(shadowRadiusAnimation, forKey: "animation_shadow_radius")
+            }
     }
 
     private func handleChanged(_ gesture: UILongPressGestureRecognizer) {
@@ -130,6 +156,17 @@ class ViewController: UIViewController {
                     withDuration: 0.3,
                     animations: {
                         subview.transform = .identity
+                    }
+                )
+            }
+        
+        // shadow animation
+        [otherView, anotherView]
+            .forEach { subview in
+                UIView.animate(
+                    withDuration: 0.3,
+                    animations: {
+                        subview.layer.removeAllAnimations()
                     }
                 )
             }
